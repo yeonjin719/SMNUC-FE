@@ -1,20 +1,23 @@
+import type { TClassType } from '../types/class';
+import isNowUsing from '../utils/isNowUsing';
+
 type ClassCardProps = {
     idx: number;
-    subject: string;
-    professor: string;
-    day: string;
-    time: string;
+    cls: TClassType;
 };
 
-const ClassCard = ({ idx, subject, professor, day, time }: ClassCardProps) => {
+const ClassCard = ({ idx, cls }: ClassCardProps) => {
+    const isUsing = isNowUsing(cls);
     return (
         <li
             key={idx}
-            className="border p-3 rounded hover:bg-gray-50 transition"
+            className={`border p-3 rounded transition ${
+                isUsing ? 'bg-blue-100 hover:bg-blue-200' : 'hover:bg-gray-50'
+            }`}
         >
-            <div className="font-semibold">{subject}</div>
+            <div className="font-bold">{cls.subject}</div>
             <div className="text-sm text-gray-700">
-                교수: {professor} | 요일: {day} | 시간: {time}
+                교수: {cls.professor} | 요일: {cls.day} | 시간: {cls.time}
             </div>
         </li>
     );

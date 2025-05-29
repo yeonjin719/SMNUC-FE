@@ -3,6 +3,7 @@ import Layout from '../layout/layout';
 import Home from '../pages/home';
 import Building from '../pages/building';
 import SearchClassroom from '../pages/searchClassroom';
+import Timetable from '../pages/timetable';
 
 const router = createBrowserRouter([
     {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/classroom/:id',
-                element: <div>Classroom Detail Page</div>,
+                element: <Timetable></Timetable>,
             },
             {
                 path: '/search',

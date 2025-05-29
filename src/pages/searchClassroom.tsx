@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchClassByRoomPrefix } from '../apis/class';
 import type { ClassesByRoom } from '../types/class';
 import { useState } from 'react';
-import ClassCard from '../component/classCard';
-
+import ClassroomCard from '../component/classroomCard';
 const SearchClassroom = () => {
     const [searchValue, setSearchValue] = useState('');
     const [queryParam, setQueryParam] = useState('');
@@ -56,24 +55,10 @@ const SearchClassroom = () => {
                     }`}
                 >
                     {Object.entries(data).map(([room, classes]) => (
-                        <div
-                            key={room}
-                            className="bg-white shadow rounded-xl p-4"
-                        >
-                            <h2 className="text-xl font-bold mb-4">{room}</h2>
-                            <ul className="space-y-3">
-                                {classes.map((cls, idx) => (
-                                    <ClassCard
-                                        key={idx}
-                                        idx={idx}
-                                        subject={cls.subject}
-                                        professor={cls.professor}
-                                        day={cls.day}
-                                        time={cls.time}
-                                    ></ClassCard>
-                                ))}
-                            </ul>
-                        </div>
+                        <ClassroomCard
+                            room={room}
+                            classes={classes}
+                        ></ClassroomCard>
                     ))}
                 </div>
             )}
