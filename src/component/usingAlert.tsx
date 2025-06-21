@@ -1,4 +1,4 @@
-const UsingAlert = ({ isUsing }: { isUsing: boolean }) => {
+const UsingAlert = ({ isUsing }: { isUsing: boolean | undefined }) => {
     return (
         <div>
             {isUsing ? (

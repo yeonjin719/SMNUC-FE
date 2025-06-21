@@ -43,3 +43,15 @@ export const fetchClassByRoomPrefix = async ({
         console.error('에러:', err);
     }
 };
+
+export const getNowUsing = async (roomId: string) => {
+    try {
+        const response = await axios.get(
+            `http://localhost:3000/api/nowUsing/${roomId}`
+        );
+        return response.data;
+    } catch (error) {
+        console.error('❌ 현재 사용 중인 강의실 데이터 요청 실패:', error);
+        throw error;
+    }
+};

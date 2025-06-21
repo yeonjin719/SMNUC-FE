@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
     type BuildingType,
     BuildingNames,
@@ -15,6 +15,7 @@ import { dayMap, type weekdaysType } from '../constants/timeInfo';
 import SelectDay from '../component/selectDay';
 import Loading from './loading';
 import Error from './error';
+
 const breakpointColumnsObj = {
     default: 3,
     1024: 2,
@@ -42,8 +43,22 @@ const Building = () => {
             }),
     });
 
-    if (isLoading || !data) return <Loading></Loading>;
+    const classroomCards = useMemo(() => {
+        if (!data) return null;
+        return (
+            <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="flex gap-6"
+                columnClassName="space-y-6"
+            >
+                {Object.entries(data).map(([room, classes]) => (
+                    <ClassroomCard key={room} room={room} classes={classes} />
+                ))}
+            </Masonry>
+        );
+    }, [data]);
 
+    if (isLoading || !data) return <Loading />;
     if (isError) return <Error />;
 
     return (
@@ -55,24 +70,16 @@ const Building = () => {
                     setBuilding={setBuilding}
                     setShow={setShow}
                     show={show}
-                ></SelectBuilding>
+                />
                 <SelectDay
                     setDay={setDay}
                     day={day}
                     show={dayShow}
                     setShow={setDayShow}
-                ></SelectDay>
+                />
             </div>
 
-            <Masonry
-                breakpointCols={breakpointColumnsObj}
-                className="flex gap-6"
-                columnClassName="space-y-6"
-            >
-                {Object.entries(data).map(([room, classes]) => (
-                    <ClassroomCard key={room} room={room} classes={classes} />
-                ))}
-            </Masonry>
+            {classroomCards}
         </div>
     );
 };

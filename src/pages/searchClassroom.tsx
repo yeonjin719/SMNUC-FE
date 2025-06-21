@@ -7,9 +7,10 @@ const SearchClassroom = () => {
     const [searchValue, setSearchValue] = useState('');
     const [queryParam, setQueryParam] = useState('');
 
-    const { data, isLoading, isError, refetch } = useQuery<ClassesByRoom>({
+    const { data, isFetching, isError, refetch } = useQuery<ClassesByRoom>({
         queryKey: ['class', queryParam],
-        queryFn: () => fetchClassByRoomPrefix(queryParam),
+        queryFn: () =>
+            fetchClassByRoomPrefix({ prefix: queryParam, day: 'ALL' }),
         enabled: false,
     });
 
@@ -22,14 +23,15 @@ const SearchClassroom = () => {
         refetch();
     };
 
-    if (isLoading) return <div>로딩 중...</div>;
-
     if (isError) return <div>데이터를 불러오는 데 실패했습니다.</div>;
 
     return (
-        <div className="flex flex-col items-center h-full w-full">
+        <div className="flex flex-col items-center min-h-[80vh] h-full w-full">
             <div className="flex flex-col items-center justify-center mt-10">
-                <h1 className="text-2xl font-bold mb-4">강의실 검색</h1>
+                <h1 className="text-2xl font-bold mb-2">강의실 검색</h1>
+                <div className="mb-4">
+                    강의실 번호로 검색이 가능합니다. (ex: A103){' '}
+                </div>
                 <div className="flex gap-4 justify-center">
                     <input
                         value={searchValue}
@@ -46,7 +48,9 @@ const SearchClassroom = () => {
                     </button>
                 </div>
             </div>
-            {data && (
+            {isFetching ? (
+                <div className="h-full flex items-center">로딩 중입니다...</div>
+            ) : data ? (
                 <div
                     className={`p-6 gap-6 ${
                         Object.keys(data).length < 3
@@ -56,12 +60,13 @@ const SearchClassroom = () => {
                 >
                     {Object.entries(data).map(([room, classes]) => (
                         <ClassroomCard
+                            key={room}
                             room={room}
                             classes={classes}
-                        ></ClassroomCard>
+                        />
                     ))}
                 </div>
-            )}
+            ) : null}
         </div>
     );
 };

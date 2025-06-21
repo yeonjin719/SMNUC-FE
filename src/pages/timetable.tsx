@@ -1,27 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
-import type { ClassesByRoom } from '../types/class';
-import { fetchClassByRoomPrefix } from '../apis/class';
+import type { ClassesByRoom, TUsingClassroom } from '../types/class';
+import { fetchClassByRoomPrefix, getNowUsing } from '../apis/class';
 import { useParams } from 'react-router-dom';
 import { times, weekdays } from '../constants/timeInfo';
 import { pastelColors } from '../style/pastelColor';
 import { getStableColorMap } from '../utils/getStableColorMap';
 import UsingAlert from '../component/usingAlert';
-import isNowUsing from '../utils/isNowUsing';
 
 const tdOptionClass =
-    'max-w-[150px] w-[150px] h-[40px] border text-sm text-center align-middle whitespace-pre-line px-2';
+    'max-w-[150px] w-[150px] max-h-[60px] min-h-[60px] h-[60px] border text-sm text-center align-middle whitespace-pre-line px-2';
 const thOptionClass =
-    'bg-blue-50 w-[150px] max-w-[150px] h-[40px] border text-sm text-center';
+    'bg-blue-50 w-[150px] max-w-[150px] max-h-[60px] min-h-[60px] h-[60px] border text-sm text-center';
 
 type CellInfo = {
     key: string;
     subject: string;
     professor: string;
+    classNum: string;
 } | null;
 
 const Timetable = () => {
     const param = useParams();
-
     const cellData: CellInfo[][] = Array.from({ length: times.length }, () =>
         Array(6).fill(null)
     );
@@ -35,7 +34,13 @@ const Timetable = () => {
 
     const { data, isLoading, isError } = useQuery<ClassesByRoom>({
         queryKey: ['class', param.id!],
-        queryFn: () => fetchClassByRoomPrefix(param.id!),
+        queryFn: () =>
+            fetchClassByRoomPrefix({ prefix: param.id!, day: 'ALL' }),
+    });
+
+    const { data: usingData } = useQuery<TUsingClassroom>({
+        queryKey: ['using', param.id!],
+        queryFn: () => getNowUsing(param.id!),
     });
 
     if (isLoading || !data) return <div>로딩 중...</div>;
@@ -56,8 +61,9 @@ const Timetable = () => {
         const span = sortedPeriods.length;
 
         cellData[startRow][col] = {
-            subject: `${cls.subject}`,
-            professor: `${cls.professor}`,
+            subject: cls.subject,
+            professor: cls.professor,
+            classNum: cls.original.SBJ_DIVCLS.split('-')[1],
             key: cls.original.SBJ_NO,
         };
         rowSpanData[startRow][col] = span;
@@ -69,7 +75,7 @@ const Timetable = () => {
         }
     });
 
-    const isUsing = isNowUsing(data[param.id!]);
+    const isUsing = usingData?.inUse;
 
     return (
         <div className="overflow-auto w-full flex justify-center flex-col px-40 gap-4">
@@ -113,11 +119,16 @@ const Timetable = () => {
                                             backgroundColor: bgColor,
                                         }}
                                     >
-                                        <span className="font-semibold text-[15px]">
-                                            {cell?.subject || ''}
-                                        </span>
-                                        <br />
-                                        <span>{cell?.professor || ''}</span>
+                                        <div className="flex flex-col justify-center h-full">
+                                            <span className="font-semibold text-[15px]">
+                                                {cell?.subject || ''}
+                                                {cell?.classNum && '-'}
+                                                {cell?.classNum || ''}
+                                            </span>
+                                            <span className="font-medium text-[12px]">
+                                                {cell?.professor || ''}
+                                            </span>
+                                        </div>
                                     </td>
                                 );
                             })}

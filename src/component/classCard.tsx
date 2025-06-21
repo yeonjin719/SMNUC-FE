@@ -1,13 +1,12 @@
 import type { TClassType } from '../types/class';
-import isNowUsing from '../utils/isNowUsing';
 
 type ClassCardProps = {
     idx: number;
     cls: TClassType;
+    isUsing: boolean | undefined;
 };
 
-const ClassCard = ({ idx, cls }: ClassCardProps) => {
-    const isUsing = isNowUsing(cls);
+const ClassCard = ({ idx, cls, isUsing }: ClassCardProps) => {
     return (
         <li
             key={idx}

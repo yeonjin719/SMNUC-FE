@@ -17,7 +17,12 @@ const Navbar = () => {
                     >
                         건물 별 조회
                     </div>
-                    <div onClick={() => navigate('/search')}>검색</div>
+                    <div
+                        onClick={() => navigate('/search')}
+                        className="hover:cursor-pointer"
+                    >
+                        검색
+                    </div>
                 </div>
             </div>
         </div>

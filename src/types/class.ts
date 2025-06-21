@@ -41,3 +41,8 @@ export type TClassType = {
 export type ClassesByRoom = {
     [room: string]: TClassType[];
 };
+
+export type TUsingClassroom = {
+    inUse: boolean;
+    room: string;
+};

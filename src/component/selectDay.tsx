@@ -34,6 +34,7 @@ const SelectDay = ({ setShow, show, day, setDay }: SelectDayProps) => {
                         <div
                             onClick={() => setDay(day as weekdaysType)}
                             className={optionClass}
+                            key={day}
                         >
                             {day}
                         </div>
