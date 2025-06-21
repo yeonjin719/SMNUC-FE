@@ -27,10 +27,16 @@ export const getFilteredClasses = async (params: FilterParams) => {
     return res.data;
 };
 
-export const fetchClassByRoomPrefix = async (prefix: string) => {
+export const fetchClassByRoomPrefix = async ({
+    prefix,
+    day,
+}: {
+    prefix: string;
+    day: string;
+}) => {
     try {
         const res = await axios.get('http://localhost:3000/api/classrooms', {
-            params: { room: prefix },
+            params: { room: prefix, day },
         });
         return res.data;
     } catch (err) {

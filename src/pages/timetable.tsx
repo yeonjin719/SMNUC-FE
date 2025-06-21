@@ -9,7 +9,7 @@ import UsingAlert from '../component/usingAlert';
 import isNowUsing from '../utils/isNowUsing';
 
 const tdOptionClass =
-    'max-w-[150px] w-[150px] h-[40px] border text-sm text-center align-middle whitespace-pre-line';
+    'max-w-[150px] w-[150px] h-[40px] border text-sm text-center align-middle whitespace-pre-line px-2';
 const thOptionClass =
     'bg-blue-50 w-[150px] max-w-[150px] h-[40px] border text-sm text-center';
 
@@ -113,7 +113,7 @@ const Timetable = () => {
                                             backgroundColor: bgColor,
                                         }}
                                     >
-                                        <span className="font-black text-[15px]">
+                                        <span className="font-semibold text-[15px]">
                                             {cell?.subject || ''}
                                         </span>
                                         <br />

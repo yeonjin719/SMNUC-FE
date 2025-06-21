@@ -5,7 +5,7 @@ const Navbar = () => {
         <div className="w-full min-h-[80px] flex items-center px-8">
             <div className="flex justify-between w-full">
                 <div
-                    className="text-black font-bold text-2xl"
+                    className="text-black font-bold text-2xl hover:cursor-pointer"
                     onClick={() => navigate('/')}
                 >
                     SMNUC

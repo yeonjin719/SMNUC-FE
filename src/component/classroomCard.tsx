@@ -1,4 +1,4 @@
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { TClassType } from '../types/class';
 import ClassCard from './classCard';
 import isNowUsing from '../utils/isNowUsing';
@@ -13,7 +13,7 @@ const ClassroomCard = ({
     classes: TClassType[];
 }) => {
     const isUsing = isNowUsing(classes);
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div
@@ -21,16 +21,21 @@ const ClassroomCard = ({
             className="bg-white shadow rounded-xl p-4 w-[300px] h-fit"
         >
             <div className="flex justify-between">
-                <div
-                    className="flex gap-4 items-center "
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    {isOpen ? (
-                        <IoIosArrowDown></IoIosArrowDown>
-                    ) : (
-                        <IoIosArrowUp></IoIosArrowUp>
-                    )}
-                    <h2 className="text-xl font-bold">{room}</h2>
+                <div className="flex gap-4 items-center ">
+                    <div onClick={() => setIsOpen(!isOpen)}>
+                        {isOpen ? (
+                            <IoIosArrowDown></IoIosArrowDown>
+                        ) : (
+                            <IoIosArrowUp></IoIosArrowUp>
+                        )}
+                    </div>
+
+                    <h2
+                        className="text-xl font-bold hover:cursor-pointer"
+                        onClick={() => navigate(`/classroom/${room}`)}
+                    >
+                        {room}
+                    </h2>
                 </div>
 
                 <UsingAlert isUsing={isUsing}></UsingAlert>
