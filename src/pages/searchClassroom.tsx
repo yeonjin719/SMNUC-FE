@@ -5,11 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import ClassroomCard from '../component/classroomCard';
 
 import { getFilteredClassrooms } from '../apis/class';
-
+import { IoIosInformationCircleOutline } from 'react-icons/io';
 const SearchClassroom = () => {
     const [searchValue, setSearchValue] = useState('');
     const [queryParam, setQueryParam] = useState('');
-
+    const [showTooltip, setShowTooltip] = useState(false);
     const { data, isFetching, isError } = useQuery({
         queryKey: ['class', queryParam],
         queryFn: () =>
@@ -28,16 +28,28 @@ const SearchClassroom = () => {
 
     return (
         <div className="flex flex-col items-center min-h-[80vh] h-full w-full">
-            <div className="flex flex-col items-center justify-center mt-10">
-                <h1 className="text-2xl font-bold mb-2">강의실 검색</h1>
-                <div className="mb-4">
-                    강의실 번호로 검색이 가능합니다. (ex: A103){' '}
-                </div>
-                <div className="flex gap-4 justify-center">
+            <div className="flex flex-col items-center justify-center mt-10 w-[80%] gap-2">
+                <h1 className="relative text-2xl font-bold mb-2 flex items-center gap-4">
+                    강의실 검색
+                    <IoIosInformationCircleOutline
+                        className="hover:cursor-pointer"
+                        size={20}
+                        onMouseEnter={() => setShowTooltip(true)}
+                        onMouseLeave={() => setShowTooltip(false)}
+                    />
+                    {showTooltip && (
+                        <div className="absolute top-[25px] right-[-20px] mt-1 bg-neutral-600 text-white font-normal text-[12px] px-2 py-1 rounded shadow-md z-10 whitespace-nowrap">
+                            강의실 명을 클릭하면 해당 강의실의 시간표를 볼 수
+                            있습니다.
+                        </div>
+                    )}
+                </h1>
+
+                <div className="flex gap-4 justify-center w-full">
                     <input
                         value={searchValue}
                         type="text"
-                        placeholder="강의실 명을 입력해주세요..."
+                        placeholder="강의실명 검색 (ex: G207)"
                         className="p-2 border border-gray-300 rounded w-64"
                         onChange={(e) => setSearchValue(e.target.value)}
                     />

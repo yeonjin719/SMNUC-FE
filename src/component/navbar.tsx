@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { IoSearch } from 'react-icons/io5';
 const Navbar = () => {
     const navigate = useNavigate();
     return (
@@ -10,19 +11,18 @@ const Navbar = () => {
                 >
                     SMNUC
                 </div>
-                <div className="flex gap-6">
+                <div className="flex gap-6 items-center">
                     <div
                         onClick={() => navigate('/building')}
                         className="hover:cursor-pointer"
                     >
                         건물 별 조회
                     </div>
-                    <div
-                        onClick={() => navigate('/search')}
+                    <IoSearch
                         className="hover:cursor-pointer"
-                    >
-                        검색
-                    </div>
+                        size={20}
+                        onClick={() => navigate('/search')}
+                    ></IoSearch>
                 </div>
             </div>
         </div>
