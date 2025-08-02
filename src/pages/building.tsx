@@ -37,7 +37,8 @@ const Building = () => {
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['class', building, day],
-        queryFn: () => getClassesByBuilding(KoreanToCode[building]),
+        queryFn: () =>
+            getClassesByBuilding({ building: KoreanToCode[building], day }),
     });
 
     const classroomCards = useMemo(() => {

@@ -14,14 +14,14 @@ const dayOrder: Record<string, number> = {
     일: 7,
 };
 
-const dayMap: Record<string, string> = {
-    Mon: '월',
-    Tue: '화',
-    Wed: '수',
-    Thu: '목',
-    Fri: '금',
-    Sat: '토',
-    Sun: '일',
+export const dayMap: Record<string, string> = {
+    월: 'Mon',
+    화: 'Tue',
+    수: 'Wed',
+    목: 'Thu',
+    금: 'Fri',
+    토: 'Sat',
+    ALL: 'ALL',
 };
 
 let cachedData: AllClassrooms | null = null;
@@ -73,11 +73,13 @@ export async function getRoomData(room: string): Promise<TClassData[]> {
 
 export async function getFilteredClassrooms(params: {
     prefix?: string;
-    day?: string; // 영어 요일 ex) 'Mon'
+    day?: string; // 한글 요일 ex) '월'
 }): Promise<AllClassrooms> {
     const { prefix, day } = params;
     const data = await loadData();
-    const targetDay = !day || day === 'ALL' ? null : dayMap[day] || null;
+
+    // 한글 → 영어로 매핑 (예: '수' → 'Wed')
+    const targetDay = !day || day === 'ALL' ? undefined : dayMap[day];
 
     const filtered: AllClassrooms = {};
 
@@ -97,15 +99,26 @@ export async function getFilteredClassrooms(params: {
     return sortClassrooms(filtered);
 }
 
-export async function getClassesByBuilding(
-    building: string
-): Promise<AllClassrooms> {
+export async function getClassesByBuilding({
+    building,
+    day,
+}: {
+    building: string;
+    day?: string;
+}): Promise<AllClassrooms> {
     const data = await loadData();
     const filtered: AllClassrooms = {};
 
+    const targetDay = !day || day === 'ALL' ? undefined : day;
+
     Object.entries(data).forEach(([room, classes]) => {
-        if (room.startsWith(building)) {
-            filtered[room] = sortSchedules(classes);
+        if (!room.startsWith(building)) return;
+
+        const filteredClasses = targetDay
+            ? classes.filter((cls) => cls.day === targetDay)
+            : classes;
+        if (filteredClasses.length > 0) {
+            filtered[room] = sortSchedules(filteredClasses);
         }
     });
 
