@@ -6,12 +6,12 @@ import {
 } from '../constants/building';
 
 import { useQuery } from '@tanstack/react-query';
-import { fetchClassByRoomPrefix } from '../apis/class';
+import { getClassesByBuilding, type TClassData } from '../apis/class';
 import SelectBuilding from '../component/selectBuilding';
-import type { ClassesByRoom } from '../types/class';
+
 import ClassroomCard from '../component/classroomCard';
 import Masonry from 'react-masonry-css';
-import { dayMap, type weekdaysType } from '../constants/timeInfo';
+import { type weekdaysType } from '../constants/timeInfo';
 import SelectDay from '../component/selectDay';
 import Loading from './loading';
 import Error from './error';
@@ -34,13 +34,9 @@ const Building = () => {
     const [show, setShow] = useState<boolean>(false);
     const [dayShow, setDayShow] = useState<boolean>(false);
 
-    const { data, isLoading, isError } = useQuery<ClassesByRoom>({
+    const { data, isLoading, isError } = useQuery({
         queryKey: ['class', building, day],
-        queryFn: () =>
-            fetchClassByRoomPrefix({
-                prefix: KoreanToCode[building],
-                day: dayMap[day],
-            }),
+        queryFn: () => getClassesByBuilding(KoreanToCode[building]),
     });
 
     const classroomCards = useMemo(() => {
@@ -52,7 +48,11 @@ const Building = () => {
                 columnClassName="space-y-6"
             >
                 {Object.entries(data).map(([room, classes]) => (
-                    <ClassroomCard key={room} room={room} classes={classes} />
+                    <ClassroomCard
+                        key={room}
+                        room={room}
+                        classes={classes as TClassData[]}
+                    />
                 ))}
             </Masonry>
         );

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { ClassesByRoom, TUsingClassroom } from '../types/class';
-import { fetchClassByRoomPrefix, getNowUsing } from '../apis/class';
+import { getFilteredClassrooms, getNowUsing } from '../apis/class';
 import { useParams } from 'react-router-dom';
 import { times, weekdays } from '../constants/timeInfo';
 import { pastelColors } from '../style/pastelColor';
@@ -32,13 +31,12 @@ const Timetable = () => {
         Array(6).fill(false)
     );
 
-    const { data, isLoading, isError } = useQuery<ClassesByRoom>({
+    const { data, isLoading, isError } = useQuery({
         queryKey: ['class', param.id!],
-        queryFn: () =>
-            fetchClassByRoomPrefix({ prefix: param.id!, day: 'ALL' }),
+        queryFn: () => getFilteredClassrooms({ prefix: param.id!, day: 'ALL' }),
     });
 
-    const { data: usingData } = useQuery<TUsingClassroom>({
+    const { data: usingData } = useQuery({
         queryKey: ['using', param.id!],
         queryFn: () => getNowUsing(param.id!),
     });
@@ -48,7 +46,6 @@ const Timetable = () => {
 
     const classList = data[param.id!] ?? [];
 
-    // 색상 매핑용 키 생성: 과목번호 기준
     const uniqueKeys = classList.map((cls) => cls.original.SBJ_NO);
     const colorMap = getStableColorMap(uniqueKeys, pastelColors);
 
@@ -63,7 +60,7 @@ const Timetable = () => {
         cellData[startRow][col] = {
             subject: cls.subject,
             professor: cls.professor,
-            classNum: cls.original.SBJ_DIVCLS.split('-')[1],
+            classNum: (cls.original.SBJ_DIVCLS as string).split('-')[1],
             key: cls.original.SBJ_NO,
         };
         rowSpanData[startRow][col] = span;
@@ -78,7 +75,7 @@ const Timetable = () => {
     const isUsing = usingData?.inUse;
 
     return (
-        <div className="overflow-auto w-full flex justify-center flex-col px-40 gap-4">
+        <div className="overflow-auto w-full flex justify-center flex-col px-40 gap-4 py-[40px]">
             <div className="flex w-full justify-between">
                 <h1 className="text-2xl self-center">{param.id} 강의실</h1>
                 <UsingAlert isUsing={isUsing}></UsingAlert>

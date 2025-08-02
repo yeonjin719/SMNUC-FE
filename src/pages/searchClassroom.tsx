@@ -1,29 +1,30 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchClassByRoomPrefix } from '../apis/class';
-import type { ClassesByRoom } from '../types/class';
+// src/pages/SearchClassroom.tsx
+
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import ClassroomCard from '../component/classroomCard';
+
+import { getFilteredClassrooms } from '../apis/class';
+
 const SearchClassroom = () => {
     const [searchValue, setSearchValue] = useState('');
     const [queryParam, setQueryParam] = useState('');
 
-    const { data, isFetching, isError, refetch } = useQuery<ClassesByRoom>({
+    const { data, isFetching, isError } = useQuery({
         queryKey: ['class', queryParam],
         queryFn: () =>
-            fetchClassByRoomPrefix({ prefix: queryParam, day: 'ALL' }),
-        enabled: false,
+            getFilteredClassrooms({ prefix: queryParam, day: 'ALL' }),
+        enabled: !!queryParam,
     });
 
-    const handleSearch = async () => {
-        if (!searchValue.trim()) {
+    const handleSearch = () => {
+        const trimmed = searchValue.trim();
+        if (!trimmed) {
             alert('강의실 명을 입력해주세요.');
             return;
         }
-        await setQueryParam(searchValue);
-        refetch();
+        setQueryParam(trimmed);
     };
-
-    if (isError) return <div>데이터를 불러오는 데 실패했습니다.</div>;
 
     return (
         <div className="flex flex-col items-center min-h-[80vh] h-full w-full">
@@ -48,26 +49,46 @@ const SearchClassroom = () => {
                     </button>
                 </div>
             </div>
-            {isFetching ? (
-                <div className="h-full flex items-center">로딩 중입니다...</div>
-            ) : data ? (
-                <div
-                    className={`p-6 gap-6 ${
-                        Object.keys(data).length < 3
-                            ? 'flex justify-center'
-                            : 'grid grid-cols-1 md:grid-cols-3 '
-                    }`}
-                >
-                    {Object.entries(data).map(([room, classes]) => (
-                        <ClassroomCard
-                            key={room}
-                            room={room}
-                            classes={classes}
-                        />
-                    ))}
+
+            {isError && (
+                <div className="text-red-500 mt-10">
+                    데이터를 불러오는 데 실패했습니다.
                 </div>
-            ) : null}
+            )}
+
+            {isFetching && (
+                <div className="h-full flex items-center mt-10">
+                    로딩 중입니다...
+                </div>
+            )}
+
+            {!isFetching && data && (
+                <>
+                    {Object.keys(data).length === 0 ? (
+                        <div className="mt-10 text-gray-500">
+                            해당 강의실 정보를 찾을 수 없습니다.
+                        </div>
+                    ) : (
+                        <div
+                            className={`p-6 gap-6 ${
+                                Object.keys(data).length < 3
+                                    ? 'flex justify-center'
+                                    : 'grid grid-cols-1 md:grid-cols-3 '
+                            }`}
+                        >
+                            {Object.entries(data).map(([room, classes]) => (
+                                <ClassroomCard
+                                    key={room}
+                                    room={room}
+                                    classes={classes}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </>
+            )}
         </div>
     );
 };
+
 export default SearchClassroom;
