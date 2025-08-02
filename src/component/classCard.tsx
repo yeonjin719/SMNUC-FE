@@ -1,8 +1,9 @@
-import type { TClassType } from '../types/class';
+// import type { TClassData } from '../apis/class';
+import type { TClassData } from '../types/class';
 
 type ClassCardProps = {
     idx: number;
-    cls: TClassType;
+    cls: TClassData;
     isUsing: boolean | undefined;
 };
 

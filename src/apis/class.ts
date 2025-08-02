@@ -1,13 +1,6 @@
 // src/utils/classroomUtils.ts
 
-export type TClassData = {
-    subject: string;
-    professor: string;
-    day: '월' | '화' | '수' | '목' | '금' | '토' | '일';
-    periods: number[];
-    time: string;
-    original: Record<string, never>; // 🔧 순환 참조 방지
-};
+import type { TClassData } from '../types/class';
 
 type AllClassrooms = Record<string, TClassData[]>;
 

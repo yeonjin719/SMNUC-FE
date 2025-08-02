@@ -6,7 +6,7 @@ import {
 } from '../constants/building';
 
 import { useQuery } from '@tanstack/react-query';
-import { getClassesByBuilding, type TClassData } from '../apis/class';
+import { getClassesByBuilding } from '../apis/class';
 import SelectBuilding from '../component/selectBuilding';
 
 import ClassroomCard from '../component/classroomCard';
@@ -15,6 +15,7 @@ import { type weekdaysType } from '../constants/timeInfo';
 import SelectDay from '../component/selectDay';
 import Loading from './loading';
 import Error from './error';
+import type { TClassData } from '../types/class';
 
 const breakpointColumnsObj = {
     default: 3,

@@ -1,25 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import type { TClassType, TUsingClassroom } from '../types/class';
+
 import ClassCard from './classCard';
 import UsingAlert from './usingAlert';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { useState, useMemo, memo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getNowUsing } from '../apis/class';
-
-const areEqual = (
-    prevProps: { room: string; classes: TClassType[] },
-    nextProps: { room: string; classes: TClassType[] }
-): boolean => {
-    return (
-        prevProps.room === nextProps.room &&
-        JSON.stringify(prevProps.classes) === JSON.stringify(nextProps.classes)
-    );
-};
+import type { TClassData } from '../types/class';
 
 const ClassroomCard = memo(
-    ({ room, classes }: { room: string; classes: TClassType[] }) => {
-        const { data } = useQuery<TUsingClassroom>({
+    ({ room, classes }: { room: string; classes: TClassData[] }) => {
+        const { data } = useQuery({
             queryKey: ['using', room],
             queryFn: () => getNowUsing(room),
         });
@@ -64,8 +55,7 @@ const ClassroomCard = memo(
                 {isOpen && <ul className="space-y-3 mt-4">{classList}</ul>}
             </div>
         );
-    },
-    areEqual
+    }
 );
 
 export default ClassroomCard;
