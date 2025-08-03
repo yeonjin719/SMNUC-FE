@@ -64,7 +64,7 @@ const Building = () => {
     if (isError) return <Error />;
 
     return (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col self-start items-center gap-4">
             <div className="flex items-center justify-between w-full gap-2">
                 <div></div>
                 <SelectBuilding

@@ -27,7 +27,7 @@ const SearchClassroom = () => {
     };
 
     return (
-        <div className="flex flex-col items-center min-h-[80vh] h-full w-full">
+        <div className="flex flex-col self-start items-center min-h-full w-full">
             <div className="flex flex-col items-center justify-center mt-10 w-[80%] gap-2">
                 <h1 className="relative text-2xl font-bold mb-2 flex items-center gap-4">
                     강의실 검색
@@ -39,8 +39,9 @@ const SearchClassroom = () => {
                     />
                     {showTooltip && (
                         <div className="absolute top-[25px] right-[-20px] mt-1 bg-neutral-600 text-white font-normal text-[12px] px-2 py-1 rounded shadow-md z-10 whitespace-nowrap">
-                            강의실 명을 클릭하면 해당 강의실의 시간표를 볼 수
-                            있습니다.
+                            강의실 명을 클릭하면
+                            <br />
+                            해당 강의실의 시간표를 볼 수 있습니다.
                         </div>
                     )}
                 </h1>
@@ -85,7 +86,7 @@ const SearchClassroom = () => {
                             className={`p-6 gap-6 ${
                                 Object.keys(data).length < 3
                                     ? 'flex justify-center'
-                                    : 'grid grid-cols-1 md:grid-cols-3 '
+                                    : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
                             }`}
                         >
                             {Object.entries(data).map(([room, classes]) => (

@@ -3,7 +3,7 @@ import { IoSearch } from 'react-icons/io5';
 const Navbar = () => {
     const navigate = useNavigate();
     return (
-        <div className="w-full min-h-[80px] flex items-center px-8">
+        <div className="w-full h-[60px] min-h-[60px] flex items-center px-8">
             <div className="flex justify-between w-full">
                 <div
                     className="text-black font-bold text-2xl hover:cursor-pointer"

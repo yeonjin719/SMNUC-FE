@@ -91,10 +91,10 @@ const Timetable = () => {
                 <UsingAlert isUsing={isUsing} />
             </div>
 
-            <table className="table-fixed border-collapse rounded-md">
+            <table className="table-fixed border-collapse">
                 <thead>
                     <tr>
-                        <th className="bg-blue-50 max-w-fit whitespace-nowrap max-h-[60px] min-h-[60px] h-[60px] border text-sm text-center">
+                        <th className="bg-blue-50 !max-w-[30px] w-[30px] whitespace-nowrap max-h-[60px] min-h-[60px] h-[60px] border text-sm text-center">
                             시간
                         </th>
                         {visibleWeekdays.map((day) => (
@@ -107,7 +107,7 @@ const Timetable = () => {
                 <tbody>
                     {shortTimes.map((time, rowIdx) => (
                         <tr key={rowIdx}>
-                            <td className="sm:text-sm text-[10px] max-w-fit max-h-[60px] min-h-[60px] h-[60px] border text-sm text-end align-top pl-2 pr-1 whitespace-pre-line">
+                            <td className="sm:text-sm !text-[10px] w-[30px] !max-w-[30px] max-h-[60px] min-h-[60px] h-[60px] border text-sm text-end align-top pl-2 pr-1 whitespace-pre-line">
                                 {time}
                             </td>
                             {visibleWeekdays.map((_, colIdx) => {
